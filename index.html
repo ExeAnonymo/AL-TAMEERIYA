@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AL Thameriya</title>
+    <link rel="stylesheet" type="text/css" href="css.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        div {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            color: #333333;
+        }
+
+        #history {
+            margin-top: 20px;
+        }
+
+        ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            background-color: #e0e0e0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        button.clear {
+            background-color: #ff3333;
+        }
+
+        button.clear:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+       <div>
+        <h1 style="color: #333333; font-size: 24px; margin-bottom: 20px;">AL TAMEERIYA AL WUSTA TRADING EST</h1>
+        <label for="priceInput">Enter Price:</label>
+        <input type="number" id="priceInput" placeholder="Enter price">
+        
+        <label for="percentageInput">Custom Percentage:</label>
+        <input type="number" id="percentageInput" placeholder="Enter percentage" value="40">
+
+        <button onclick="calculateProfit()">Calculate</button>
+        <button onclick="resetFields()">Reset</button>
+    </div>
+
+    <div id="result">
+        <strong>Total:</strong>
+        <span id="profitResult"></span>
+    </div>
+
+    <div id="history">
+        <strong>History:</strong>
+        <ol id="historyList"></ol>
+        <button onclick="calculateTotalHistory()">Calculate Total History</button>
+        <button class="clear" onclick="clearHistory()">Clear History</button>
+        <span id="totalHistory"></span>
+    </div>
+
+    <script>
+        var profitsHistory = [];
+
+        function calculateProfit() {
+            var priceInput = document.getElementById('priceInput').value;
+            var price = parseFloat(priceInput);
+            var percentageInput = document.getElementById('percentageInput').value;
+            var perc = parseFloat(percentageInput) || 40;
+
+            if (!isNaN(price)) {
+                var profit = (price / 100) * perc + price;
+                displayResult(profit);
+                addToHistory(price, profit);
+            } else {
+                alert('Please enter a valid price.');
+            }
+        }
+
+        function displayResult(profit) {
+            var resultElement = document.getElementById('profitResult');
+            resultElement.textContent = profit.toFixed(2);
+        }
+
+        function addToHistory(price, profit) {
+            var historyList = document.getElementById('historyList');
+            var historyItem = document.createElement('li');
+            historyItem.textContent = 'Price: ' + price.toFixed(2) + ' | Sell price: ' + profit.toFixed(2);
+            historyList.appendChild(historyItem);
+            profitsHistory.push(profit);
+        }
+
+        function resetFields() {
+            document.getElementById('priceInput').value = '';
+            document.getElementById('percentageInput').value = '40';
+            document.getElementById('profitResult').textContent = '';
+        }
+
+        function calculateTotalHistory() {
+            var totalHistory = profitsHistory.reduce((acc, profit) => acc + profit, 0);
+            document.getElementById('totalHistory').textContent = 'Total History: ' + totalHistory.toFixed(2);
+        }
+
+        function clearHistory() {
+            var historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            profitsHistory = [];
+            document.getElementById('totalHistory').textContent = 'Total History: 0.00';
+        }
+    </script>
+
+</body>
+</html>
